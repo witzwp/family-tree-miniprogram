@@ -1,0 +1,45 @@
+/* pages/member/add.wxss */
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 12rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-light);
+  margin-bottom: 40rpx;
+}
+
+.gender-picker {
+  display: flex;
+  gap: 40rpx;
+}
+
+.gender-option {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--border-color);
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.gender-option.active {
+  border-color: var(--primary-color);
+  background: rgba(139, 69, 19, 0.05);
+  color: var(--primary-color);
+}
+
+.arrow {
+  color: var(--text-light);
+}
+
+.btn-secondary {
+  margin-top: 20rpx;
+}

@@ -1,0 +1,30 @@
+<!--pages/welcome/index.wxml-->
+<view class="container welcome-container">
+  <view class="logo-section">
+    <image class="logo" src="/images/family-tree.png" mode="aspectFit"></image>
+    <text class="title">家族树</text>
+    <text class="subtitle">记录家族历史，传承家族文化</text>
+  </view>
+
+  <view class="features-section">
+    <view class="feature-item">
+      <image class="feature-icon" src="/images/icon-register.png"></image>
+      <text class="feature-text">登记个人信息</text>
+    </view>
+    <view class="feature-item">
+      <image class="feature-icon" src="/images/icon-tree.png"></image>
+      <text class="feature-text">可视化家谱</text>
+    </view>
+    <view class="feature-item">
+      <image class="feature-icon" src="/images/icon-search.png"></image>
+      <text class="feature-text">查找家族成员</text>
+    </view>
+  </view>
+
+  <view class="action-section">
+    <button class="btn btn-primary" bindtap="startRegister">
+      开始登记
+    </button>
+    <text class="tip-text">首次使用需要填写您的基本信息</text>
+  </view>
+</view>

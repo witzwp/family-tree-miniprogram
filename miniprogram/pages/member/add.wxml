@@ -1,0 +1,81 @@
+<!--pages/member/add.wxml-->
+<view class="container">
+  <text class="page-title">添加家族成员</text>
+  <text class="page-subtitle">代录入家族成员信息</text>
+
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label form-label-required">姓名</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入成员姓名"
+        value="{{name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label form-label-required">性别</text>
+      <view class="gender-picker">
+        <view 
+          class="gender-option {{gender === 'male' ? 'active' : ''}}"
+          data-gender="male"
+          bindtap="onGenderSelect"
+        >
+          <text>男</text>
+        </view>
+        <view 
+          class="gender-option {{gender === 'female' ? 'active' : ''}}"
+          data-gender="female"
+          bindtap="onGenderSelect"
+        >
+          <text>女</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">出生日期</text>
+      <picker mode="date" value="{{birthDate}}" bindchange="onBirthDateChange">
+        <view class="form-picker">
+          <text>{{birthDate || '请选择出生日期'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">籍贯</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入籍贯"
+        value="{{birthplace}}"
+        bindinput="onBirthplaceInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">与我的关系</text>
+      <picker bindchange="onRelationChange" value="{{relationIndex}}" range="{{relationOptions}}">
+        <view class="form-picker">
+          <text>{{relationOptions[relationIndex] || '请选择关系'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">备注</text>
+      <textarea 
+        class="form-textarea"
+        placeholder="其他信息（选填）"
+        value="{{bio}}"
+        bindinput="onBioInput"
+        maxlength="200"
+      />
+    </view>
+  </view>
+
+  <button class="btn btn-primary {{!canSubmit ? 'btn-disabled' : ''}}" bindtap="addMember">添加成员</button>
+  <button class="btn btn-secondary" bindtap="cancel">取消</button>
+</view>

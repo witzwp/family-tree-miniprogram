@@ -1,0 +1,107 @@
+<!--pages/register/profile.wxml-->
+<view class="container">
+  <view class="progress-bar">
+    <view class="progress-step active">1</view>
+    <view class="progress-line"></view>
+    <view class="progress-step">2</view>
+  </view>
+  <text class="progress-text">基本信息</text>
+
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label form-label-required">头像</text>
+      <button class="avatar-picker" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="avatar avatar-lg" src="{{avatarUrl}}"></image>
+        <view wx:else class="avatar-placeholder">
+          <text class="placeholder-text">点击上传</text>
+        </view>
+      </button>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label form-label-required">姓名</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入您的真实姓名"
+        value="{{name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label form-label-required">性别</text>
+      <view class="gender-picker">
+        <view 
+          class="gender-option {{gender === 'male' ? 'active' : ''}}"
+          data-gender="male"
+          bindtap="onGenderSelect"
+        >
+          <text>男</text>
+        </view>
+        <view 
+          class="gender-option {{gender === 'female' ? 'active' : ''}}"
+          data-gender="female"
+          bindtap="onGenderSelect"
+        >
+          <text>女</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">出生日期</text>
+      <picker mode="date" value="{{birthDate}}" bindchange="onBirthDateChange">
+        <view class="form-picker">
+          <text>{{birthDate || '请选择出生日期'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">籍贯</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入您的籍贯（省/市）"
+        value="{{birthplace}}"
+        bindinput="onBirthplaceInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">现居地</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入您的现居地"
+        value="{{currentLocation}}"
+        bindinput="onLocationInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">联系电话</text>
+      <input 
+        class="form-input" 
+        type="number"
+        placeholder="请输入手机号码（选填）"
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">个人简介</text>
+      <textarea 
+        class="form-textarea"
+        placeholder="介绍一下自己（选填）"
+        value="{{bio}}"
+        bindinput="onBioInput"
+        maxlength="200"
+      />
+    </view>
+  </view>
+
+  <button class="btn btn-primary {{!canSubmit ? 'btn-disabled' : ''}}" bindtap="nextStep">
+    下一步
+  </button>
+</view>

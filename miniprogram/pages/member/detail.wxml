@@ -1,0 +1,136 @@
+<!--pages/member/detail.wxml-->
+<view class="container detail-container">
+  <!-- 头部信息 -->
+  <view class="header-card">
+    <image class="detail-avatar" src="{{member.avatar || '/images/default-avatar.png'}}"></image>
+    <text class="detail-name">{{member.name}}</text>
+    <view class="detail-tags">
+      <text class="tag tag-primary">第{{member.generation}}代</text>
+      <text class="tag {{member.gender === 'male' ? 'tag-male' : 'tag-female'}}">
+        {{member.gender === 'male' ? '男' : '女'}}
+      </text>
+    </view>
+
+    <view wx:if="{{isSelf}}" class="edit-btn" bindtap="editProfile">
+      <text>编辑资料</text>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="card info-card">
+    <view class="info-title">基本信息</view>
+    
+    <view class="info-item">
+      <text class="info-label">出生日期</text>
+      <text class="info-value">{{member.birthDate || '未填写'}}</text>
+    </view>
+
+    <view class="info-item">
+      <text class="info-label">籍贯</text>
+      <text class="info-value">{{member.birthplace || '未填写'}}</text>
+    </view>
+
+    <view class="info-item">
+      <text class="info-label">现居地</text>
+      <text class="info-value">{{member.currentLocation || '未填写'}}</text>
+    </view>
+
+    <view class="info-item" wx:if="{{member.phone && (isSelf || isFamilyMember)}}">
+      <text class="info-label">联系电话</text>
+      <text class="info-value">{{member.phone}}</text>
+      <text class="copy-btn" bindtap="copyPhone">复制</text>
+    </view>
+
+    <view wx:if="{{member.bio}}" class="bio-section">
+      <view class="info-label">个人简介</view>
+      <text class="bio-text">{{member.bio}}</text>
+    </view>
+  </view>
+
+  <!-- 家族关系 -->
+  <view class="card relations-card">
+    <view class="info-title">家族关系</view>
+
+    <!-- 父母 -->
+    <view class="relation-section">
+      <text class="relation-title">父母</text>
+      <view class="relation-list">
+        <view wx:if="{{relations.father}}" class="relation-item" data-id="{{relations.father._id}}" bindtap="goToMember">
+          <image class="avatar avatar-sm" src="{{relations.father.avatar || '/images/default-avatar.png'}}"></image>
+          <view class="relation-info">
+            <text class="relation-name">{{relations.father.name}}</text>
+            <text class="relation-type">父亲</text>
+          </view>
+          <text class="arrow">></text>
+        </view>
+
+        <view wx:if="{{relations.mother}}" class="relation-item" data-id="{{relations.mother._id}}" bindtap="goToMember">
+          <image class="avatar avatar-sm" src="{{relations.mother.avatar || '/images/default-avatar.png'}}"></image>
+          <view class="relation-info">
+            <text class="relation-name">{{relations.mother.name}}</text>
+            <text class="relation-type">母亲</text>
+          </view>
+          <text class="arrow">></text>
+        </view>
+
+        <view wx:if="{{!relations.father && !relations.mother}}" class="empty-text">
+          暂无父母信息
+        </view>
+      </view>
+    </view>
+
+    <!-- 配偶 -->
+    <view class="relation-section" wx:if="{{relations.spouse}}">
+      <text class="relation-title">配偶</text>
+      <view class="relation-item" data-id="{{relations.spouse._id}}" bindtap="goToMember">
+        <image class="avatar avatar-sm" src="{{relations.spouse.avatar || '/images/default-avatar.png'}}"></image>
+        <view class="relation-info">
+          <text class="relation-name">{{relations.spouse.name}}</text>
+        </view>
+        <text class="arrow">></text>
+      </view>
+    </view>
+
+    <!-- 子女 -->
+    <view class="relation-section" wx:if="{{relations.children && relations.children.length > 0}}">
+      <text class="relation-title">子女 ({{relations.children.length}}人)</text>
+      <view class="relation-list">
+        <view 
+          wx:for="{{relations.children}}"
+          wx:key="_id"
+          class="relation-item"
+          data-id="{{item._id}}"
+          bindtap="goToMember"
+        >
+          <image class="avatar avatar-sm" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+          <view class="relation-info">
+            <text class="relation-name">{{item.name}}</text>
+            <text class="relation-type" wx:if="{{item.gender}}">{{item.gender === 'male' ? '子' : '女'}}</text>
+          </view>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 兄弟姐妹 -->
+    <view class="relation-section" wx:if="{{siblings && siblings.length > 0}}">
+      <text class="relation-title">兄弟姐妹 ({{siblings.length}}人)</text>
+      <view class="relation-list">
+        <view 
+          wx:for="{{siblings}}"
+          wx:key="_id"
+          class="relation-item"
+          data-id="{{item._id}}"
+          bindtap="goToMember"
+        >
+          <image class="avatar avatar-sm" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+          <view class="relation-info">
+            <text class="relation-name">{{item.name}}</text>
+            <text class="relation-type">{{item.gender === 'male' ? '兄/弟' : '姐/妹'}}</text>
+          </view>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

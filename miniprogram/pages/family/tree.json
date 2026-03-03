@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "family-tree": "/components/family-tree/family-tree"
+  },
+  "navigationBarTitleText": "家谱"
+}

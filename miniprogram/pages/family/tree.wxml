@@ -1,0 +1,89 @@
+<!--pages/family/tree.wxml-->
+<view class="container tree-container">
+  <!-- 头部统计 -->
+  <view class="stats-bar">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.totalCount || 0}}</text>
+      <text class="stat-label">家族人数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.generationCount || 0}}</text>
+      <text class="stat-label">总辈数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">第{{myGeneration || '-'}}代</text>
+      <text class="stat-label">我的辈分</text>
+    </view>
+  </view>
+
+  <!-- 视图切换 -->
+  <view class="view-switcher">
+    <view 
+      class="view-option {{viewMode === 'tree' ? 'active' : ''}}"
+      data-mode="tree"
+      bindtap="switchView"
+    >
+      家谱树
+    </view>
+    <view 
+      class="view-option {{viewMode === 'mindmap' ? 'active' : ''}}"
+      data-mode="mindmap"
+      bindtap="switchView"
+    >
+      脑图
+    </view>
+    <view 
+      class="view-option {{viewMode === 'list' ? 'active' : ''}}"
+      data-mode="list"
+      bindtap="switchView"
+    >
+      列表
+    </view>
+  </view>
+
+  <!-- 家谱树视图 -->
+  <view wx:if="{{viewMode === 'tree'}}" class="tree-view">
+    <family-tree treeData="{{treeData}}" bind:nodetap="onNodeTap"></family-tree>
+  </view>
+
+  <!-- 脑图视图 -->
+  <view wx:if="{{viewMode === 'mindmap'}}" class="mindmap-view">
+    <canvas type="2d" id="mindmapCanvas" class="mindmap-canvas"></canvas>
+  </view>
+
+  <!-- 列表视图 -->
+  <view wx:if="{{viewMode === 'list'}}" class="list-view">
+    <view class="generation-group" wx:for="{{generationList}}" wx:key="generation">
+      <view class="generation-title">第 {{item.generation}} 代</view>
+      <view class="member-list">
+        <view 
+          class="member-item" 
+          wx:for="{{item.members}}"
+          wx:for-item="member"
+          wx:key="_id"
+          data-id="{{member._id}}"
+          bindtap="goToMemberDetail"
+        >
+          <image class="avatar avatar-sm" src="{{member.avatar || '/images/default-avatar.png'}}"></image>
+          <view class="member-info">
+            <text class="member-name">{{member.name}}</text>
+            <text class="member-location" wx:if="{{member.currentLocation}}">{{member.currentLocation}}</text>
+          </view>
+          <view class="member-tag {{member.gender === 'male' ? 'tag-male' : 'tag-female'}}">
+            {{member.gender === 'male' ? '男' : '女'}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮按钮 -->
+  <view class="fab-container">
+    <view class="fab-btn fab-search" bindtap="goToSearch">
+      <image src="/images/search-white.png"></image>
+    </view>
+    <view class="fab-btn fab-add" bindtap="goToAddMember">
+      <text>+</text>
+    </view>
+  </view>
+</view>

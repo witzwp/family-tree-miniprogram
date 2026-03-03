@@ -1,0 +1,74 @@
+<!--pages/member/edit.wxml-->
+<view class="container">
+  <text class="page-title">编辑资料</text>
+
+  <view class="card">
+    <view class="form-item">
+      <text class="form-label">头像</text>
+      <button class="avatar-picker" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image wx:if="{{avatar}}" class="avatar avatar-lg" src="{{avatar}}"></image>
+        <view wx:else class="avatar-placeholder">
+          <text>点击更换</text>
+        </view>
+      </button>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label form-label-required">姓名</text>
+      <input 
+        class="form-input" 
+        value="{{name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label form-label-required">性别</text>
+      <view class="gender-picker">
+        <view 
+          class="gender-option {{gender === 'male' ? 'active' : ''}}"
+          data-gender="male"
+          bindtap="onGenderSelect"
+        ><text>男</text></view>
+        <view 
+          class="gender-option {{gender === 'female' ? 'active' : ''}}"
+          data-gender="female"
+          bindtap="onGenderSelect"
+        ><text>女</text></view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">出生日期</text>
+      <picker mode="date" value="{{birthDate}}" bindchange="onBirthDateChange">
+        <view class="form-picker">
+          <text>{{birthDate || '请选择'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">籍贯</text>
+      <input class="form-input" value="{{birthplace}}" bindinput="onBirthplaceInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">现居地</text>
+      <input class="form-input" value="{{currentLocation}}" bindinput="onLocationInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">联系电话</text>
+      <input class="form-input" type="number" value="{{phone}}" bindinput="onPhoneInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">个人简介</text>
+      <textarea class="form-textarea" value="{{bio}}" bindinput="onBioInput" maxlength="200"/>
+    </view>
+  </view>
+
+  <button class="btn btn-primary" bindtap="save">保存</button>
+  <button class="btn btn-secondary" bindtap="cancel">取消</button>
+</view>

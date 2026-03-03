@@ -1,0 +1,67 @@
+/* pages/member/edit.wxss */
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 40rpx;
+}
+
+.avatar-picker {
+  width: 160rpx;
+  height: 160rpx;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.avatar-picker::after {
+  border: none;
+}
+
+.avatar-placeholder {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx dashed var(--primary-light);
+}
+
+.avatar-placeholder text {
+  font-size: 24rpx;
+  color: var(--primary-color);
+}
+
+.gender-picker {
+  display: flex;
+  gap: 40rpx;
+}
+
+.gender-option {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--border-color);
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.gender-option.active {
+  border-color: var(--primary-color);
+  background: rgba(139, 69, 19, 0.05);
+  color: var(--primary-color);
+}
+
+.arrow {
+  color: var(--text-light);
+}
+
+.btn-secondary {
+  margin-top: 20rpx;
+}

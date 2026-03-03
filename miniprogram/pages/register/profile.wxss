@@ -1,0 +1,94 @@
+/* pages/register/profile.wxss */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.progress-step {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: var(--border-color);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.progress-step.active {
+  background: var(--primary-color);
+}
+
+.progress-line {
+  width: 60rpx;
+  height: 4rpx;
+  background: var(--border-color);
+  margin: 0 16rpx;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-color);
+  margin-bottom: 40rpx;
+}
+
+.avatar-picker {
+  width: 160rpx;
+  height: 160rpx;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.avatar-picker::after {
+  border: none;
+}
+
+.avatar-placeholder {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx dashed var(--primary-light);
+}
+
+.placeholder-text {
+  font-size: 24rpx;
+  color: var(--primary-color);
+}
+
+.gender-picker {
+  display: flex;
+  gap: 40rpx;
+}
+
+.gender-option {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--border-color);
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.gender-option.active {
+  border-color: var(--primary-color);
+  background: rgba(139, 69, 19, 0.05);
+  color: var(--primary-color);
+}
+
+.arrow {
+  color: var(--text-light);
+}

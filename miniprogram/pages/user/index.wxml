@@ -1,0 +1,73 @@
+<!--pages/user/index.wxml-->
+<view class="container user-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <image class="user-avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"></image>
+    <text class="user-name">{{memberInfo.name || userInfo.nickName || '未登记'}}</text>
+    <view wx:if="{{memberInfo.generation}}" class="user-generation">
+      <text>第{{memberInfo.generation}}代</text>
+    </view>
+
+    <view wx:if="{{!memberInfo}}" class="register-tip">
+      <text>您还未登记家族信息</text>
+      <button class="btn btn-primary btn-small" bindtap="goToRegister">立即登记</button>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-list">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goToMyProfile">
+        <image class="menu-icon" src="/images/icon-profile.png"></image>
+        <text class="menu-text">我的资料</text>
+        <text class="arrow">></text>
+      </view>
+
+      <view class="menu-item" bindtap="goToFamily">
+        <image class="menu-icon" src="/images/icon-family.png"></image>
+        <text class="menu-text">我的家谱</text>
+        <text class="arrow">></text>
+      </view>
+
+      <view class="menu-item" bindtap="goToAddMember">
+        <image class="menu-icon" src="/images/icon-add.png"></image>
+        <text class="menu-text">添加成员</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+
+    <view class="menu-group">
+      <view class="menu-item" bindtap="inviteFamily">
+        <image class="menu-icon" src="/images/icon-share.png"></image>
+        <text class="menu-text">邀请家族成员</text>
+        <text class="arrow">></text>
+      </view>
+
+      <view class="menu-item" bindtap="showStats">
+        <image class="menu-icon" src="/images/icon-stats.png"></image>
+        <text class="menu-text">家族统计</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+
+    <view class="menu-group">
+      <view class="menu-item" bindtap="showPrivacy">
+        <image class="menu-icon" src="/images/icon-privacy.png"></image>
+        <text class="menu-text">隐私政策</text>
+        <text class="arrow">></text>
+      </view>
+
+      <view class="menu-item" bindtap="showAbout">
+        <image class="menu-icon" src="/images/icon-about.png"></image>
+        <text class="menu-text">关于家族树</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <button class="btn btn-secondary logout-btn" bindtap="logout">退出登录</button>
+
+  <!-- 版本信息 -->
+  <text class="version-text">家族树 v1.0.0</text>
+</view>

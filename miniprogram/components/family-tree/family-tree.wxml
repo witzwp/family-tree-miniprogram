@@ -1,0 +1,35 @@
+<!--components/family-tree/family-tree.wxml-->
+<view class="family-tree-container">
+  <scroll-view 
+    class="tree-scroll"
+    scroll-x="{{true}}"
+    scroll-y="{{true}}"
+    enhanced="{{true}}"
+    show-scrollbar="{{true}}"
+  >
+    <view class="tree-content" style="width: {{treeWidth}}px; height: {{treeHeight}}px;">
+      <view class="tree-node root-node"
+        style="left: {{rootNode.x}}px; top: {{rootNode.y}}px;"
+        data-id="{{rootNode.id}}"
+        bindtap="onNodeTap"
+      >
+        <image class="node-avatar" src="{{rootNode.avatar || '/images/default-avatar.png'}}"></image>
+        <text class="node-name">{{rootNode.name}}</text>
+        <view class="node-generation">第{{rootNode.generation}}代</view>
+      </view>
+
+      <!-- 递归渲染子节点 -->
+      <render-children nodes="{{rootNode.children}}" parentX="{{rootNode.x}}" parentY="{{rootNode.y}}"></render-children>
+
+      <!-- 连接线 Canvas -->
+      <canvas type="2d" id="treeLines" class="lines-canvas"></canvas>
+    </view>
+  </scroll-view>
+
+  <!-- 控制按钮 -->
+  <view class="tree-controls">
+    <view class="control-btn" bindtap="zoomIn">+</view>
+    <view class="control-btn" bindtap="zoomOut">-</view>
+    <view class="control-btn" bindtap="resetView">⌂</view>
+  </view>
+</view>

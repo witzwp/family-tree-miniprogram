@@ -1,0 +1,28 @@
+<!--pages/login/index.wxml-->
+<view class="container login-container">
+  <view class="logo-section">
+    <image class="logo" src="/images/family-tree.png" mode="aspectFit"></image>
+    <text class="title">家族树</text>
+  </view>
+
+  <view class="login-section">
+    <text class="login-title">微信一键登录</text>
+    <text class="login-desc">请授权微信登录，开始使用家谱功能</text>
+
+    <button 
+      class="btn btn-primary login-btn" 
+      open-type="getUserInfo" 
+      bind:getuserinfo="onGetUserInfo"
+    >
+      <image class="wx-icon" src="/images/wechat.png"></image>
+      微信登录
+    </button>
+
+    <view class="privacy-tips">
+      <text>登录即表示您同意</text>
+      <text class="link" bindtap="showPrivacy">《隐私政策》</text>
+      <text>和</text>
+      <text class="link" bindtap="showTerms">《用户协议》</text>
+    </view>
+  </view>
+</view>

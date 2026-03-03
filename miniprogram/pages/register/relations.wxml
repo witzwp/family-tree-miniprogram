@@ -1,0 +1,110 @@
+<!--pages/register/relations.wxml-->
+<view class="container">
+  <view class="progress-bar">
+    <view class="progress-step">1</view>
+    <view class="progress-line"></view>
+    <view class="progress-step active">2</view>
+  </view>
+  <text class="progress-text">家族关系</text>
+
+  <view class="card">
+    <view class="section-title">父母信息</view>
+
+    <view class="form-item">
+      <text class="form-label">父亲</text>
+      <view wx:if="{{father}}" class="selected-person">
+        <image class="avatar avatar-sm" src="{{father.avatar || '/images/default-avatar.png'}}"></image>
+        <text class="person-name">{{father.name}}</text>
+        <text class="remove-btn" data-type="father" bindtap="removeRelation">×</text>
+      </view>
+      <view wx:else class="add-relation" data-type="father" bindtap="selectRelation">
+        <text class="add-icon">+</text>
+        <text>选择或添加父亲</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">母亲</text>
+      <view wx:if="{{mother}}" class="selected-person">
+        <image class="avatar avatar-sm" src="{{mother.avatar || '/images/default-avatar.png'}}"></image>
+        <text class="person-name">{{mother.name}}</text>
+        <text class="remove-btn" data-type="mother" bindtap="removeRelation">×</text>
+      </view>
+      <view wx:else class="add-relation" data-type="mother" bindtap="selectRelation">
+        <text class="add-icon">+</text>
+        <text>选择或添加母亲</text>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="section-title">配偶信息</text>
+
+    <view class="form-item">
+      <text class="form-label">配偶</text>
+      <view wx:if="{{spouse}}" class="selected-person">
+        <image class="avatar avatar-sm" src="{{spouse.avatar || '/images/default-avatar.png'}}"></image>
+        <text class="person-name">{{spouse.name}}</text>
+        <text class="remove-btn" data-type="spouse" bindtap="removeRelation">×</text>
+      </view>
+      <view wx:else class="add-relation" data-type="spouse" bindtap="selectRelation">
+        <text class="add-icon">+</text>
+        <text>选择或添加配偶</text>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="section-title">子女信息</text>
+
+    <view class="children-list">
+      <view wx:for="{{children}}" wx:key="index" class="selected-person child-item">
+        <image class="avatar avatar-sm" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+        <text class="person-name">{{item.name}}</text>
+        <text class="remove-btn" data-index="{{index}}" data-type="children" bindtap="removeRelation">×</text>
+      </view>
+      <view class="add-relation" data-type="children" bindtap="selectRelation">
+        <text class="add-icon">+</text>
+        <text>添加子女</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="skip-tip">
+    <text bindtap="skipRelations">暂时不清楚，跳过此步骤 ></text>
+  </view>
+
+  <button class="btn btn-primary" bindtap="completeRegister">完成登记</button>
+</view>
+
+<!-- 选择成员弹窗 -->
+<view wx:if="{{showSelector}}" class="selector-modal">
+  <view class="modal-mask" bindtap="closeSelector"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text>选择{{selectorType === 'father' ? '父亲' : selectorType === 'mother' ? '母亲' : selectorType === 'spouse' ? '配偶' : '子女'}}</text>
+      <text class="close-btn" bindtap="closeSelector">×</text>
+    </view>
+    <view class="modal-body">
+      <input class="search-input" placeholder="搜索姓名" bindinput="onSearchMember"/>
+      
+      <view class="member-list">
+        <view 
+          wx:for="{{searchResults}}"
+          wx:key="_id"
+          class="member-option"
+          data-item="{{item}}"
+          bindtap="confirmSelection"
+        >
+          <image class="avatar avatar-sm" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+          <text>{{item.name}}</text>
+          <text class="generation-tag">第{{item.generation}}代</text>
+        </view>
+      </view>
+      
+      <view class="add-new-btn" bindtap="addNewMember">
+        <text>+ 添加新成员</text>
+      </view>
+    </view>
+  </view>
+</view>

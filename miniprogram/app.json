@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/welcome/index",
+    "pages/login/index",
+    "pages/register/profile",
+    "pages/register/relations",
+    "pages/family/tree",
+    "pages/member/detail",
+    "pages/member/add",
+    "pages/member/edit",
+    "pages/search/index",
+    "pages/user/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#8B4513",
+    "navigationBarTitleText": "家族树",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#8B4513",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/family/tree",
+        "text": "家谱",
+        "iconPath": "images/tree.png",
+        "selectedIconPath": "images/tree-active.png"
+      },
+      {
+        "pagePath": "pages/search/index",
+        "text": "搜索",
+        "iconPath": "images/search.png",
+        "selectedIconPath": "images/search-active.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "family-tree": "./components/family-tree/family-tree",
+    "member-card": "./components/member-card/member-card"
+  }
+}

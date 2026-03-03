@@ -1,0 +1,90 @@
+<!--pages/search/index.wxml-->
+<view class="container">
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <image class="search-icon" src="/images/search.png"></image>
+      <input 
+        class="search-input"
+        placeholder="搜索家族成员姓名"
+        value="{{keyword}}"
+        bindinput="onInput"
+        confirm-type="search"
+        bindconfirm="onSearch"
+      />
+      <view wx:if="{{keyword}}" class="clear-btn" bindtap="clearSearch">×</view>
+    </view>
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- 筛选条件 -->
+  <view class="filter-bar">
+    <picker bindchange="onGenerationChange" value="{{generationIndex}}" range="{{generationOptions}}">
+      <view class="filter-item">
+        <text>{{generationOptions[generationIndex] || '全部辈分'}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+
+    <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genderOptions}}">
+      <view class="filter-item">
+        <text>{{genderOptions[genderIndex] || '全部性别'}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:if="{{results.length > 0}}" class="results-list">
+    <view 
+      class="result-item" 
+      wx:for="{{results}}"
+      wx:key="_id"
+      data-id="{{item._id}}"
+      bindtap="goToDetail"
+    >
+      <image class="avatar avatar-md" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+      
+      <view class="result-info">
+        <view class="result-header">
+          <text class="result-name">{{item.name}}</text>
+          <view class="result-tags">
+            <text class="tag tag-primary">第{{item.generation}}代</text>
+            <text class="tag {{item.gender === 'male' ? 'tag-male' : 'tag-female'}}">
+              {{item.gender === 'male' ? '男' : '女'}}
+            </text>
+          </view>
+        </view>
+        <view wx:if="{{item.birthplace}}" class="result-detail">
+          <text>籍贯: {{item.birthplace}}</text>
+        </view>
+        <view wx:if="{{item.currentLocation}}" class="result-detail">
+          <text>现居: {{item.currentLocation}}</text>
+        </view>
+      </view>
+
+      <text class="arrow-right">></text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{hasSearched}}" class="empty-state">
+    <image class="empty-icon" src="/images/empty-search.png" mode="aspectFit"></image>
+    <text>未找到相关成员</text>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view wx:else class="hot-search">
+    <text class="section-title">最近更新</text>
+    <view class="member-chips">
+      <view 
+        class="member-chip"
+        wx:for="{{recentMembers}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="goToDetail"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+</view>
