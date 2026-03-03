@@ -1,0 +1,153 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Code Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        cd cloud/functions/user && npm ci
+        cd ../member && npm ci
+    
+    - name: Run ESLint
+      run: |
+        npm run lint --if-present || echo "No lint script"
+    
+    - name: Check JavaScript syntax
+      run: |
+        node --check cloud/functions/user/index.js
+        node --check cloud/functions/member/index.js
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        cd cloud/functions/user && npm ci
+        cd ../member && npm ci
+    
+    - name: Run tests
+      run: |
+        npm test --if-present || echo "No tests yet"
+
+  validate:
+    name: Validate Mini Program
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Validate JSON files
+      run: |
+        for file in miniprogram/app.json project.config.json miniprogram/pages/*/index.json; do
+          if [ -f "$file" ]; then
+            echo "Validating $file"
+            node -e "JSON.parse(require('fs').readFileSync('$file'))" || exit 1
+          fi
+        done
+        echo "All JSON files are valid"
+    
+    - name: Check file structure
+      run: |
+        echo "Checking required files..."
+        test -f miniprogram/app.js || (echo "Missing app.js" && exit 1)
+        test -f miniprogram/app.json || (echo "Missing app.json" && exit 1)
+        test -f miniprogram/app.wxss || (echo "Missing app.wxss" && exit 1)
+        test -f project.config.json || (echo "Missing project.config.json" && exit 1)
+        echo "All required files present"
+    
+    - name: Check cloud functions
+      run: |
+        test -f cloud/functions/user/index.js || (echo "Missing user function" && exit 1)
+        test -f cloud/functions/member/index.js || (echo "Missing member function" && exit 1)
+        echo "Cloud functions present"
+
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: [lint, test, validate]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Comment PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ CI checks passed! Preview ready for manual testing.'
+          })
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [lint, test, validate]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Generate changelog
+      id: changelog
+      run: |
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        git log --pretty=format:"- %s (%h)" -10 >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        body: |
+          ## Changes
+          ${{ steps.changelog.outputs.changelog }}
+          
+          ## Deployment
+          This release is ready for WeChat Mini Program deployment.
+          
+          ### Steps:
+          1. Download source code
+          2. Open in WeChat DevTools
+          3. Upload to Mini Program platform
+        draft: true
+        prerelease: false

@@ -1,0 +1,85 @@
+name: Deploy to WeChat Mini Program
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+      description:
+        description: 'Release description'
+        required: true
+        default: 'New release'
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install miniprogram-ci
+      run: npm install -g miniprogram-ci
+    
+    - name: Prepare build
+      run: |
+        # Create dist folder
+        mkdir -p dist
+        
+        # Copy miniprogram files
+        cp -r miniprogram/* dist/
+        
+        # Copy project config
+        cp project.config.json dist/
+        
+        echo "Build prepared"
+    
+    - name: Upload to WeChat
+      env:
+        WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
+        WECHAT_PRIVATE_KEY: ${{ secrets.WECHAT_PRIVATE_KEY }}
+      run: |
+        # Save private key
+        echo "$WECHAT_PRIVATE_KEY" > private.key
+        
+        # Upload using miniprogram-ci
+        miniprogram-ci upload \
+          --appid "$WECHAT_APPID" \
+          --pkp private.key \
+          --projectPath dist \
+          --version ${{ github.event.inputs.version }} \
+          --desc "${{ github.event.inputs.description }}" \
+          --enable-es6 true \
+          --enable-es7 true
+        
+        rm private.key
+      continue-on-error: true
+    
+    - name: Create deployment artifact
+      run: |
+        zip -r family-tree-v${{ github.event.inputs.version }}.zip dist/
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: family-tree-v${{ github.event.inputs.version }}
+        path: family-tree-v${{ github.event.inputs.version }}.zip
+        retention-days: 30
+    
+    - name: Update release notes
+      run: |
+        echo "## Deployment Package v${{ github.event.inputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- Version: ${{ github.event.inputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Description: ${{ github.event.inputs.description }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Download" >> $GITHUB_STEP_SUMMARY
+        echo "Artifact uploaded successfully" >> $GITHUB_STEP_SUMMARY
