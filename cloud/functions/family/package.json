@@ -1,0 +1,9 @@
+{
+  "name": "family",
+  "version": "1.0.0",
+  "description": "Family management cloud functions",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

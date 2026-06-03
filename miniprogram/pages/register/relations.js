@@ -1,4 +1,6 @@
 // pages/register/relations.js
+const app = getApp()
+
 Page({
   data: {
     profileData: null,
@@ -27,9 +29,15 @@ Page({
 
   // 加载所有成员
   loadAllMembers() {
+    const familyId = app.globalData.currentFamilyId
+    if (!familyId) return
+
     wx.cloud.callFunction({
       name: 'member',
-      data: { action: 'search', data: {} }
+      data: {
+        action: 'search',
+        data: { familyId },
+      },
     }).then(res => {
       if (res.result.code === 0) {
         this.setData({ allMembers: res.result.data })
@@ -137,7 +145,6 @@ Page({
         })
 
         // 更新全局状态
-        const app = getApp()
         app.setGlobalData('isRegistered', true)
 
         // 跳转到家谱页

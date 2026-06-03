@@ -1,0 +1,81 @@
+<!--pages/family/select.wxml-->
+<view class="container select-container">
+  <!-- 当前家族提示 -->
+  <view class="current-family-bar" wx:if="{{currentFamilyId}}">
+    <text class="current-label">当前家族</text>
+  </view>
+
+  <!-- 家族列表 -->
+  <view class="family-list" wx:if="{{!loading}}">
+    <view
+      class="family-card {{item._id === currentFamilyId ? 'active' : ''}}"
+      wx:for="{{families}}"
+      wx:key="_id"
+      data-id="{{item._id}}"
+      bindtap="onFamilyTap"
+    >
+      <view class="family-header">
+        <text class="family-name">{{item.name}}</text>
+        <view class="active-badge" wx:if="{{item._id === currentFamilyId}}">
+          <text>使用中</text>
+        </view>
+      </view>
+      <text class="family-desc" wx:if="{{item.description}}">{{item.description}}</text>
+      <view class="family-meta">
+        <text class="meta-item">成员 {{item.memberCount || 0}} 人</text>
+        <text class="meta-item">创建者 {{item.creatorName || '未知'}}</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{families.length === 0}}">
+      <text class="empty-text">您还没有加入任何家族</text>
+      <text class="empty-sub">点击下方按钮创建新家族</text>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 创建家族按钮 -->
+  <view class="create-btn-wrapper">
+    <button class="btn btn-primary create-btn" bindtap="showCreateModal">
+      + 创建新家族
+    </button>
+  </view>
+
+  <!-- 创建家族弹窗 -->
+  <view class="modal-mask" wx:if="{{showCreateModal}}" bindtap="hideCreateModal"></view>
+  <view class="modal-content" wx:if="{{showCreateModal}}">
+    <view class="modal-header">
+      <text class="modal-title">创建新家族</text>
+      <text class="modal-close" bindtap="hideCreateModal">×</text>
+    </view>
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">家族名称</text>
+        <input
+          class="form-input"
+          placeholder="请输入家族名称"
+          value="{{newFamilyName}}"
+          bindinput="onNameInput"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">家族简介（选填）</text>
+        <input
+          class="form-input"
+          placeholder="请输入家族简介"
+          value="{{newFamilyDesc}}"
+          bindinput="onDescInput"
+        />
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="btn btn-secondary modal-btn" bindtap="hideCreateModal">取消</button>
+      <button class="btn btn-primary modal-btn" bindtap="createFamily">创建</button>
+    </view>
+  </view>
+</view>

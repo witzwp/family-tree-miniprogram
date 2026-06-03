@@ -1,4 +1,6 @@
 // pages/member/detail.js
+const app = getApp()
+
 Page({
   data: {
     memberId: null,
@@ -6,7 +8,8 @@ Page({
     relations: {},
     siblings: [],
     isSelf: false,
-    isFamilyMember: true
+    isFamilyMember: true,
+    currentFamilyId: null,
   },
 
   onLoad(options) {
@@ -17,8 +20,20 @@ Page({
       return
     }
 
-    this.setData({ memberId: id })
+    this.setData({
+      memberId: id,
+      currentFamilyId: app.globalData.currentFamilyId,
+    })
     this.loadMemberDetail(id)
+  },
+
+  onShow() {
+    const familyId = app.globalData.currentFamilyId
+    if (familyId !== this.data.currentFamilyId) {
+      this.setData({ currentFamilyId: familyId })
+      // If family changed, go back since member may not belong to new family
+      wx.navigateBack()
+    }
   },
 
   // 加载成员详情
@@ -29,22 +44,21 @@ Page({
       name: 'member',
       data: {
         action: 'get',
-        data: { id }
-      }
-    }).then(res => {
+        data: { id },
+      },
+    }).then((res) => {
       wx.hideLoading()
 
       if (res.result.code === 0) {
         const { data } = res.result
         this.setData({
           member: data,
-          relations: data.relations || {}
+          relations: data.relations || {},
         })
 
         // 检查是否是自己
-        const app = getApp()
         this.setData({
-          isSelf: app.globalData.memberInfo?._id === id
+          isSelf: app.globalData.memberInfo?._id === id,
         })
 
         // 加载兄弟姐妹
@@ -52,7 +66,7 @@ Page({
       } else {
         wx.showToast({ title: res.result.message, icon: 'none' })
       }
-    }).catch(err => {
+    }).catch((err) => {
       wx.hideLoading()
       console.error('加载失败:', err)
       wx.showToast({ title: '加载失败', icon: 'none' })
@@ -63,7 +77,10 @@ Page({
   loadSiblings(fatherId, motherId, selfId) {
     if (!fatherId && !motherId) return
 
-    const query = {}
+    const familyId = app.globalData.currentFamilyId
+    if (!familyId) return
+
+    const query = { familyId }
     if (fatherId) query.fatherId = fatherId
     if (motherId) query.motherId = motherId
 
@@ -71,11 +88,11 @@ Page({
       name: 'member',
       data: {
         action: 'search',
-        data: query
-      }
-    }).then(res => {
+        data: query,
+      },
+    }).then((res) => {
       if (res.result.code === 0) {
-        const siblings = res.result.data.filter(m => m._id !== selfId)
+        const siblings = res.result.data.filter((m) => m._id !== selfId)
         this.setData({ siblings })
       }
     })
@@ -84,7 +101,7 @@ Page({
   // 编辑资料
   editProfile() {
     wx.navigateTo({
-      url: `/pages/member/edit?id=${this.data.memberId}`
+      url: `/pages/member/edit?id=${this.data.memberId}`,
     })
   },
 
@@ -94,7 +111,7 @@ Page({
       data: this.data.member.phone,
       success: () => {
         wx.showToast({ title: '已复制', icon: 'success' })
-      }
+      },
     })
   },
 
@@ -102,7 +119,7 @@ Page({
   goToMember(e) {
     const { id } = e.currentTarget.dataset
     wx.navigateTo({
-      url: `/pages/member/detail?id=${id}`
+      url: `/pages/member/detail?id=${id}`,
     })
-  }
+  },
 })

@@ -1,4 +1,6 @@
 // pages/member/add.js
+const app = getApp()
+
 Page({
   data: {
     name: '',
@@ -58,10 +60,17 @@ Page({
   addMember() {
     if (!this.data.canSubmit) return
 
+    const familyId = app.globalData.currentFamilyId
+    if (!familyId) {
+      wx.showToast({ title: '请先选择家族', icon: 'none' })
+      return
+    }
+
     const { name, gender, birthDate, birthplace, bio, relationIndex } = this.data
 
     // 构建成员数据
     const memberData = {
+      familyId,
       name: name.trim(),
       gender,
       birthDate,
@@ -75,7 +84,6 @@ Page({
 
     // 如果选择了关系，关联到当前用户
     if (relationIndex > 0) {
-      const app = getApp()
       const myId = app.globalData.memberInfo?._id
 
       if (myId) {

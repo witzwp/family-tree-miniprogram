@@ -1,0 +1,98 @@
+<!--pages/statistics/index.wxml-->
+<view class="container stats-container">
+  <!-- Loading -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载统计中...</text>
+  </view>
+
+  <!-- Error -->
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-text">{{error}}</text>
+    <view class="retry-btn" bindtap="loadStatistics">重试</view>
+  </view>
+
+  <!-- Content -->
+  <block wx:elif="{{stats}}">
+    <!-- Summary Cards -->
+    <view class="summary-grid">
+      <view class="summary-card">
+        <text class="summary-value">{{stats.totalCount}}</text>
+        <text class="summary-label">家族总人数</text>
+      </view>
+      <view class="summary-card">
+        <text class="summary-value">{{stats.genderCount.male || 0}}</text>
+        <text class="summary-label">男性</text>
+      </view>
+      <view class="summary-card">
+        <text class="summary-value">{{stats.genderCount.female || 0}}</text>
+        <text class="summary-label">女性</text>
+      </view>
+      <view class="summary-card">
+        <text class="summary-value">{{stats.generationTotal || 0}}</text>
+        <text class="summary-label">总辈数</text>
+      </view>
+    </view>
+
+    <!-- Birth Year Timeline -->
+    <view class="card" wx:if="{{stats.birthYearRange}}">
+      <view class="card-title">出生年份范围</view>
+      <view class="timeline-bar">
+        <view class="timeline-start">{{stats.birthYearRange.min || '-'}}</view>
+        <view class="timeline-track">
+          <view class="timeline-fill" style="width: 100%;"></view>
+        </view>
+        <view class="timeline-end">{{stats.birthYearRange.max || '-'}}</view>
+      </view>
+      <view class="timeline-note">
+        跨度 {{stats.birthYearRange.span || 0}} 年
+      </view>
+    </view>
+
+    <!-- Average Children -->
+    <view class="card" wx:if="{{stats.avgChildren != null}}">
+      <view class="card-title">平均子女数</view>
+      <view class="big-number">{{stats.avgChildren}}</view>
+      <view class="card-note">每位成员平均有 {{stats.avgChildren}} 个子女</view>
+    </view>
+
+    <!-- Gender Pie Chart -->
+    <view class="card">
+      <view class="card-title">性别比例</view>
+      <view class="chart-wrap">
+        <canvas type="2d" id="genderChart" class="chart-canvas"></canvas>
+      </view>
+    </view>
+
+    <!-- Generation Bar Chart -->
+    <view class="card">
+      <view class="card-title">辈分分布</view>
+      <view class="chart-wrap">
+        <canvas type="2d" id="generationChart" class="chart-canvas"></canvas>
+      </view>
+    </view>
+
+    <!-- Age Distribution Bar Chart -->
+    <view class="card">
+      <view class="card-title">年龄分布</view>
+      <view class="chart-wrap">
+        <canvas type="2d" id="ageChart" class="chart-canvas"></canvas>
+      </view>
+    </view>
+
+    <!-- Top Surnames -->
+    <view class="card" wx:if="{{stats.topSurnames && stats.topSurnames.length > 0}}">
+      <view class="card-title">常见姓氏 TOP10</view>
+      <view class="surname-list">
+        <view class="surname-item" wx:for="{{stats.topSurnames}}" wx:key="surname">
+          <view class="surname-rank">{{index + 1}}</view>
+          <view class="surname-name">{{item.surname}}</view>
+          <view class="surname-bar-wrap">
+            <view class="surname-bar" style="width: {{item.percent}}%;"></view>
+          </view>
+          <view class="surname-count">{{item.count}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -3,17 +3,22 @@
   <view class="search-bar">
     <view class="search-input-wrap">
       <image class="search-icon" src="/images/search.png"></image>
-      <input 
+      <input
         class="search-input"
         placeholder="搜索家族成员姓名"
         value="{{keyword}}"
         bindinput="onInput"
         confirm-type="search"
         bindconfirm="onSearch"
+        focus="{{true}}"
       />
-      <view wx:if="{{keyword}}" class="clear-btn" bindtap="clearSearch">×</view>
+      <view wx:if="{{keyword}}" class="clear-btn" bindtap="clearSearch">
+        <text class="clear-icon">×</text>
+      </view>
     </view>
-    <button class="search-btn" bindtap="onSearch">搜索</button>
+    <button class="search-btn" bindtap="onSearch" loading="{{isSearching}}">
+      搜索
+    </button>
   </view>
 
   <!-- 筛选条件 -->
@@ -33,20 +38,42 @@
     </picker>
   </view>
 
+  <!-- 搜索建议下拉 -->
+  <view wx:if="{{showSuggestions}}" class="suggestions-dropdown">
+    <view
+      class="suggestion-item"
+      wx:for="{{suggestions}}"
+      wx:key="_id"
+      data-id="{{item._id}}"
+      data-name="{{item.name}}"
+      bindtap="onSelectSuggestion"
+    >
+      <image class="suggestion-avatar avatar avatar-sm" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+      <view class="suggestion-info">
+        <text class="suggestion-name">{{item.name}}</text>
+        <text class="suggestion-meta">第{{item.generation}}代 · {{item.gender === 'male' ? '男' : '女'}}</text>
+      </view>
+      <text class="arrow-right">></text>
+    </view>
+    <view wx:if="{{suggestions.length === 0}}" class="suggestion-empty">
+      <text>无匹配成员</text>
+    </view>
+  </view>
+
   <!-- 搜索结果 -->
-  <view wx:if="{{results.length > 0}}" class="results-list">
-    <view 
-      class="result-item" 
+  <view wx:if="{{hasSearched && results.length > 0}}" class="results-list">
+    <view
+      class="result-item"
       wx:for="{{results}}"
       wx:key="_id"
       data-id="{{item._id}}"
       bindtap="goToDetail"
     >
       <image class="avatar avatar-md" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
-      
+
       <view class="result-info">
         <view class="result-header">
-          <text class="result-name">{{item.name}}</text>
+          <rich-text class="result-name" nodes="{{item.highlightedName}}"></rich-text>
           <view class="result-tags">
             <text class="tag tag-primary">第{{item.generation}}代</text>
             <text class="tag {{item.gender === 'male' ? 'tag-male' : 'tag-female'}}">
@@ -72,11 +99,33 @@
     <text>未找到相关成员</text>
   </view>
 
-  <!-- 热门搜索 -->
-  <view wx:else class="hot-search">
+  <!-- 最近搜索 -->
+  <view wx:if="{{!hasSearched && recentSearches.length > 0}}" class="recent-searches">
+    <view class="section-header">
+      <text class="section-title">最近搜索</text>
+      <text class="clear-all" bindtap="clearAllRecentSearches">清空</text>
+    </view>
+    <view class="search-tags">
+      <view
+        class="search-tag"
+        wx:for="{{recentSearches}}"
+        wx:key="*this"
+        data-keyword="{{item}}"
+        bindtap="onRecentSearchTap"
+      >
+        <text class="search-tag-text">{{item}}</text>
+        <view class="search-tag-close" catchtap="removeRecentSearch" data-keyword="{{item}}">
+          <text>×</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近更新 -->
+  <view wx:if="{{!hasSearched}}" class="hot-search">
     <text class="section-title">最近更新</text>
     <view class="member-chips">
-      <view 
+      <view
         class="member-chip"
         wx:for="{{recentMembers}}"
         wx:key="_id"

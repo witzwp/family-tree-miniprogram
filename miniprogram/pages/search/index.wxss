@@ -3,6 +3,8 @@
   display: flex;
   gap: 20rpx;
   margin-bottom: 20rpx;
+  position: relative;
+  z-index: 10;
 }
 
 .search-input-wrap {
@@ -13,6 +15,7 @@
   border-radius: 40rpx;
   padding: 0 24rpx;
   height: 80rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
 }
 
 .search-icon {
@@ -25,6 +28,7 @@
 .search-input {
   flex: 1;
   font-size: 28rpx;
+  color: var(--text-color);
 }
 
 .clear-btn {
@@ -35,8 +39,13 @@
   justify-content: center;
   background: var(--border-color);
   border-radius: 50%;
+  margin-left: 12rpx;
+}
+
+.clear-icon {
   font-size: 24rpx;
   color: #ffffff;
+  line-height: 1;
 }
 
 .search-btn {
@@ -51,10 +60,16 @@
   border-radius: 40rpx;
 }
 
+.search-btn::after {
+  border: none;
+}
+
 .filter-bar {
   display: flex;
   gap: 20rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 10;
 }
 
 .filter-item {
@@ -66,6 +81,7 @@
   border-radius: 30rpx;
   font-size: 26rpx;
   color: var(--text-color);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
 }
 
 .filter-item .arrow {
@@ -73,10 +89,68 @@
   color: var(--text-light);
 }
 
+/* 搜索建议下拉 */
+.suggestions-dropdown {
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  position: relative;
+  z-index: 20;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:active {
+  background: rgba(139, 69, 19, 0.04);
+}
+
+.suggestion-avatar {
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.suggestion-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.suggestion-name {
+  font-size: 30rpx;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.suggestion-meta {
+  font-size: 24rpx;
+  color: var(--text-light);
+}
+
+.suggestion-empty {
+  padding: 40rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-light);
+}
+
+/* 搜索结果 */
 .results-list {
   background: #ffffff;
   border-radius: 16rpx;
   overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
 .result-item {
@@ -88,6 +162,10 @@
 
 .result-item:last-child {
   border-bottom: none;
+}
+
+.result-item:active {
+  background: rgba(139, 69, 19, 0.04);
 }
 
 .result-info {
@@ -108,6 +186,11 @@
   color: var(--text-color);
 }
 
+.result-name .highlight {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
 .result-tags {
   display: flex;
   gap: 12rpx;
@@ -122,10 +205,19 @@
 .arrow-right {
   font-size: 28rpx;
   color: var(--text-light);
+  margin-left: 12rpx;
 }
 
-.hot-search {
-  margin-top: 40rpx;
+/* 最近搜索 */
+.recent-searches {
+  margin-bottom: 30rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
 }
 
 .section-title {
@@ -133,7 +225,62 @@
   font-size: 28rpx;
   font-weight: 500;
   color: var(--text-color);
-  margin-bottom: 20rpx;
+}
+
+.clear-all {
+  font-size: 26rpx;
+  color: var(--text-light);
+}
+
+.search-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.search-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 20rpx;
+  background: #ffffff;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: var(--text-color);
+  border: 2rpx solid var(--border-color);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.04);
+}
+
+.search-tag:active {
+  background: rgba(139, 69, 19, 0.06);
+}
+
+.search-tag-text {
+  max-width: 200rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-tag-close {
+  width: 28rpx;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--border-color);
+  border-radius: 50%;
+}
+
+.search-tag-close text {
+  font-size: 20rpx;
+  color: #ffffff;
+  line-height: 1;
+}
+
+/* 热门搜索 / 最近更新 */
+.hot-search {
+  margin-top: 20rpx;
 }
 
 .member-chips {
@@ -149,6 +296,11 @@
   font-size: 26rpx;
   color: var(--text-color);
   border: 2rpx solid var(--border-color);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.04);
+}
+
+.member-chip:active {
+  background: rgba(139, 69, 19, 0.06);
 }
 
 .empty-icon {
