@@ -4,6 +4,39 @@
   padding-bottom: 140rpx;
 }
 
+.family-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  background: #ffffff;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.family-name-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.family-arrow {
+  font-size: 28rpx;
+  color: var(--text-light);
+}
+
+.no-family-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 60rpx;
+}
+
+.no-family-text {
+  font-size: 30rpx;
+  color: var(--text-light);
+  margin-bottom: 30rpx;
+}
+
 .stats-bar {
   display: flex;
   justify-content: space-around;
@@ -32,15 +65,16 @@
 .view-switcher {
   display: flex;
   background: #ffffff;
-  padding: 20rpx 30rpx;
+  padding: 20rpx 8rpx;
   border-bottom: 2rpx solid var(--border-color);
+  overflow-x: auto;
 }
 
 .view-option {
   flex: 1;
   text-align: center;
   padding: 16rpx 0;
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: var(--text-light);
   border-bottom: 4rpx solid transparent;
 }
@@ -164,4 +198,30 @@
   font-size: 48rpx;
   color: #ffffff;
   font-weight: 300;
+}
+
+.fab-export {
+  background: #10b981;
+}
+
+.fab-export.exporting {
+  opacity: 0.6;
+}
+
+.fab-export image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.fab-export text {
+  font-size: 36rpx;
+  color: #ffffff;
+}
+
+.export-canvas {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
 }

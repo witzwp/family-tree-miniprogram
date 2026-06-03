@@ -1,7 +1,19 @@
 <!--pages/family/tree.wxml-->
 <view class="container tree-container">
+  <!-- 家族选择栏 -->
+  <view class="family-bar" bindtap="goToSelectFamily">
+    <text class="family-name-text">{{familyName || '选择家族'}}</text>
+    <text class="family-arrow">></text>
+  </view>
+
+  <!-- 无家族提示 -->
+  <view class="no-family-tip" wx:if="{{!hasFamily}}">
+    <text class="no-family-text">您还没有选择家族</text>
+    <button class="btn btn-primary" bindtap="goToSelectFamily">选择或创建家族</button>
+  </view>
+
   <!-- 头部统计 -->
-  <view class="stats-bar">
+  <view class="stats-bar" wx:if="{{hasFamily}}">
     <view class="stat-item">
       <text class="stat-value">{{stats.totalCount || 0}}</text>
       <text class="stat-label">家族人数</text>
@@ -17,7 +29,7 @@
   </view>
 
   <!-- 视图切换 -->
-  <view class="view-switcher">
+  <view class="view-switcher" wx:if="{{hasFamily}}">
     <view 
       class="view-option {{viewMode === 'tree' ? 'active' : ''}}"
       data-mode="tree"
@@ -39,20 +51,34 @@
     >
       列表
     </view>
+    <view 
+      class="view-option {{viewMode === 'stats' ? 'active' : ''}}"
+      data-mode="stats"
+      bindtap="switchView"
+    >
+      统计
+    </view>
+    <view 
+      class="view-option {{viewMode === 'timeline' ? 'active' : ''}}"
+      data-mode="timeline"
+      bindtap="switchView"
+    >
+      时间轴
+    </view>
   </view>
 
   <!-- 家谱树视图 -->
-  <view wx:if="{{viewMode === 'tree'}}" class="tree-view">
+  <view wx:if="{{viewMode === 'tree' && hasFamily}}" class="tree-view">
     <family-tree treeData="{{treeData}}" bind:nodetap="onNodeTap"></family-tree>
   </view>
 
   <!-- 脑图视图 -->
-  <view wx:if="{{viewMode === 'mindmap'}}" class="mindmap-view">
+  <view wx:if="{{viewMode === 'mindmap' && hasFamily}}" class="mindmap-view">
     <mindmap treeData="{{treeData}}" bind:nodetap="onNodeTap"></mindmap>
   </view>
 
   <!-- 列表视图 -->
-  <view wx:if="{{viewMode === 'list'}}" class="list-view">
+  <view wx:if="{{viewMode === 'list' && hasFamily}}" class="list-view">
     <view class="generation-group" wx:for="{{generationList}}" wx:key="generation">
       <view class="generation-title">第 {{item.generation}} 代</view>
       <view class="member-list">
@@ -78,7 +104,11 @@
   </view>
 
   <!-- 悬浮按钮 -->
-  <view class="fab-container">
+  <view class="fab-container" wx:if="{{hasFamily}}">
+    <view class="fab-btn fab-export {{isExporting ? 'exporting' : ''}}" bindtap="exportTreeImage">
+      <text wx:if="{{!isExporting}}">⇩</text>
+      <text wx:else>...</text>
+    </view>
     <view class="fab-btn fab-search" bindtap="goToSearch">
       <image src="/images/search-white.png"></image>
     </view>
@@ -86,4 +116,7 @@
       <text>+</text>
     </view>
   </view>
+
+  <!-- Hidden canvas for export -->
+  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
 </view>

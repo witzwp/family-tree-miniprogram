@@ -1,0 +1,93 @@
+<!--pages/family/timeline.wxml-->
+<view class="container timeline-container">
+  <!-- Loading -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- Error -->
+  <view class="error-state" wx:if="{{!loading && error}}">
+    <text class="error-text">{{error}}</text>
+    <button class="btn btn-primary" bindtap="loadTimelineData">重新加载</button>
+  </view>
+
+  <!-- Timeline Content -->
+  <view class="timeline-content" wx:if="{{!loading && !error}}">
+    <!-- Zoom Controls -->
+    <view class="zoom-controls">
+      <view class="zoom-btn" bindtap="onZoomIn">+</view>
+      <view class="zoom-btn" bindtap="onZoomOut">-</view>
+    </view>
+
+    <!-- Scrollable Timeline -->
+    <scroll-view
+      class="timeline-scroll"
+      scroll-x="true"
+      scroll-y="true"
+      enhanced="true"
+      show-scrollbar="true"
+    >
+      <view
+        class="timeline-inner"
+        style="width: {{containerWidth * scale}}rpx; transform: scale({{scale}}); transform-origin: left top;"
+      >
+        <!-- Year Axis -->
+        <view class="year-axis">
+          <view
+            class="year-marker"
+            wx:for="{{axisYears}}"
+            wx:key="*this"
+            style="left: {{(item - yearRange.start) * 24}}rpx;"
+          >
+            <view class="year-tick"></view>
+            <text class="year-label">{{item}}</text>
+          </view>
+          <view class="axis-line"></view>
+        </view>
+
+        <!-- Generation Groups -->
+        <view
+          class="generation-section"
+          wx:for="{{timelineGroups}}"
+          wx:for-item="group"
+          wx:key="generation"
+        >
+          <!-- Generation Header -->
+          <view class="generation-header">
+            <text class="generation-title">第 {{group.generation}} 代</text>
+            <text class="generation-era">{{group.eraLabel}}</text>
+          </view>
+
+          <!-- Member Bars -->
+          <view class="member-bars">
+            <view
+              class="member-bar-wrapper"
+              wx:for="{{group.members}}"
+              wx:for-item="member"
+              wx:key="_id"
+              data-id="{{member._id}}"
+              bindtap="onMemberTap"
+            >
+              <view
+                class="member-bar"
+                style="left: {{member.barLeft}}rpx; width: {{member.barWidth}}rpx; background-color: {{member.genderColor}};"
+              >
+                <text class="member-bar-name">{{member.displayName}}</text>
+              </view>
+              <view
+                class="member-info-bubble"
+                style="left: {{member.barLeft}}rpx;"
+              >
+                <text class="member-age">{{member.age !== null ? member.age + '岁' : ''}}</text>
+                <text class="member-years" wx:if="{{member.birthYear}}">
+                  {{member.birthYear}}{{member.deathYear ? '-' + member.deathYear : '-今'}}
+                </text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
