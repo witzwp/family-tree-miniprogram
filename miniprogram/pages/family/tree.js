@@ -88,17 +88,6 @@ Page({
   switchView(e) {
     const { mode } = e.currentTarget.dataset
     this.setData({ viewMode: mode })
-
-    if (mode === 'mindmap') {
-      this.initMindmap()
-    }
-  },
-
-  // 初始化脑图
-  initMindmap() {
-    // 使用 F6 或自定义 Canvas 绘制
-    // 这里先占位，后续接入 F6
-    console.log('初始化脑图')
   },
 
   // 点击节点

@@ -1,0 +1,15 @@
+{
+  "name": "family-tree-miniprogram",
+  "version": "1.0.0",
+  "description": "张家家谱 - Zhang Family Tree WeChat Mini Program",
+  "main": "app.js",
+  "dependencies": {
+    "@antv/f6-wx": "^0.0.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,15 @@
+<!--components/mindmap/mindmap.wxml-->
+<view class="mindmap-container">
+  <canvas
+    type="2d"
+    id="mindmapCanvas"
+    class="mindmap-canvas"
+  ></canvas>
+
+  <!-- Zoom controls -->
+  <view class="mindmap-controls">
+    <view class="control-btn" bindtap="zoomIn">+</view>
+    <view class="control-btn" bindtap="zoomOut">-</view>
+    <view class="control-btn" bindtap="resetView">⌂</view>
+  </view>
+</view>

@@ -1,0 +1,39 @@
+/* components/mindmap/mindmap.wxss */
+.mindmap-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #fafafa;
+}
+
+.mindmap-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.mindmap-controls {
+  position: absolute;
+  right: 30rpx;
+  bottom: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.control-btn {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: var(--primary-color, #8B4513);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+}
+
+.control-btn:active {
+  opacity: 0.8;
+}

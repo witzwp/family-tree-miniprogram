@@ -48,7 +48,7 @@
 
   <!-- 脑图视图 -->
   <view wx:if="{{viewMode === 'mindmap'}}" class="mindmap-view">
-    <canvas type="2d" id="mindmapCanvas" class="mindmap-canvas"></canvas>
+    <mindmap treeData="{{treeData}}" bind:nodetap="onNodeTap"></mindmap>
   </view>
 
   <!-- 列表视图 -->

@@ -49,6 +49,7 @@
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
     "family-tree": "./components/family-tree/family-tree",
-    "member-card": "./components/member-card/member-card"
+    "member-card": "./components/member-card/member-card",
+    "mindmap": "./components/mindmap/mindmap"
   }
 }
